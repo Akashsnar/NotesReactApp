@@ -1,3 +1,4 @@
+import { useNavigate  } from "react-router-dom";
 import NoteContext from "./NoteContext";
 import { useState } from "react";
 
@@ -6,7 +7,7 @@ const NoteState = (props) => {
   const host = "http://localhost:5000"
   const notesInitial = []
   const [notes, setNotes] = useState(notesInitial)
-
+const navigate=useNavigate();
   // Get all Notes
   const getNotes = async () => {
     // API Call 
@@ -14,7 +15,7 @@ const NoteState = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUwMTlmODk0NzY0MDUwNGJhZjY0NGE4In0sImlhdCI6MTY5NDYwNTE5M30.IAXkuiGiGVogsyyqM04mk6qiKje1nPPCDUsUdF1VPIo"
+        "auth-token": localStorage.getItem('token')
       }
     });
     const json = await response.json()
@@ -32,7 +33,7 @@ const NoteState = (props) => {
       method: 'POST',
       headers: {
         'Content-Type': "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUwMTlmODk0NzY0MDUwNGJhZjY0NGE4In0sImlhdCI6MTY5NDYwNTE5M30.IAXkuiGiGVogsyyqM04mk6qiKje1nPPCDUsUdF1VPIo"
+        "auth-token": localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag })
     });
@@ -45,6 +46,58 @@ const NoteState = (props) => {
 
   }
 
+
+  const addUser = async (name, email, password) => {
+    // TODO: API Call
+    // API Call 
+    // console.log(JSON.stringify({title, description, tag}))
+
+    const response = await fetch(`${host}/api/auth/createuser`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json",
+           },
+      body: JSON.stringify({ name, email, password })
+    });
+
+    console.log("Adding a new User")
+
+    const user = await response.json()
+    navigate("/", { replace: true });
+
+    // setNotes(notes.concat(note))
+    console.log(user)
+  }
+
+
+  const checkUser = async (email, password) => {
+    console.log("  "+ email+password);
+    const response = await fetch(`${host}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json",
+           },
+      body: JSON.stringify({email, password })
+    });
+
+    console.log("Login a new User")
+
+    const user = await response.json()
+    if(!user.success){
+alert("wrong values")
+    }
+    else{
+      localStorage.setItem('token', user.authtoken)
+      console.log(localStorage.getItem('token'))
+      navigate("/", { replace: true });
+    }
+    // setNotes(notes.concat(note))
+    console.log(user)
+  }
+
+
+
+
   // Delete a Note
   const deleteNote = async (id) => {
     // API Call
@@ -52,7 +105,7 @@ const NoteState = (props) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUwMTlmODk0NzY0MDUwNGJhZjY0NGE4In0sImlhdCI6MTY5NDYwNTE5M30.IAXkuiGiGVogsyyqM04mk6qiKje1nPPCDUsUdF1VPIo"
+        "auth-token": localStorage.getItem('token')
       }
     });
     const json = response.json();
@@ -70,11 +123,13 @@ const NoteState = (props) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUwMTlmODk0NzY0MDUwNGJhZjY0NGE4In0sImlhdCI6MTY5NDYwNTE5M30.IAXkuiGiGVogsyyqM04mk6qiKje1nPPCDUsUdF1VPIo"
+        "auth-token": localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag })
     });
     const json = response.json();
+    console.log(json)
+
     let newnotes = JSON.parse(JSON.stringify(notes));
     // Logic to edit in client
     for (let index = 0; index < notes.length; index++) {
@@ -92,7 +147,7 @@ const NoteState = (props) => {
   }
 
   return (
-    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes }}>
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes , addUser, checkUser}}>
       {props.children}
     </NoteContext.Provider>
   )

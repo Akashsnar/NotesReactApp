@@ -26,19 +26,21 @@ const AddNote = () => {
             <h2>Add a Note</h2>
             <form className="my-3">
                 <div className="mb-3">
-                    <label htmlFor="title" className="form-label">Title</label>
+                    <label htmlFor="title" className="form-label textwhite">Title</label>
                     <input type="text"  className="form-control" id="title" name="title" aria-describedby="emailHelp" onChange={onChange} /> 
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="description" className="form-label">Description</label>
-                    <input type="text"  className="form-control" id="description" name="description" onChange={onChange} />
+                    <label htmlFor="description" className="form-label textwhite">Description</label>
+                    <textarea type="text"  className="form-control" id="description" style={{height:'10rem'}} name="description" onChange={onChange} placeholder='Add your Note'>
+                     </textarea>
+                    
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="tag" className="form-label">Tag</label>
+                    <label htmlFor="tag" className="form-label textwhite">Tag</label>
                     <input type="text" className="form-control" id="tag" name="tag" onChange={onChange} />
                 </div>
                
-                <button type="submit" className="btn btn-primary" onClick={handleClick}>Add Note</button>
+                <button type="submit" className="btn btn-primary " onClick={handleClick}>Add Note</button>
             </form>
         </div>
     )
