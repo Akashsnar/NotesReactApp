@@ -15,8 +15,10 @@ import Signup from './components/Signup';
 function App() {
   return (
     <>
-      <Router>
 
+
+      <Router>
+      
     <NoteState>
         <Navbar /> 
         

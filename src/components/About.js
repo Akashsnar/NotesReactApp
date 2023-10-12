@@ -3,7 +3,7 @@ import React from 'react'
 const About = () => {
     return (
         <div>
-            <h2 style={{margin: 'auto', textAlign: 'center'}}>About us</h2>
+            <h2 style={{margin: 'auto', textAlign: 'center', color:'white'}}>About us</h2>
     
     <div style={{color: 'white', margin: 'auto', marginTop:'2rem', textAlign: 'center', width: '60%'}}  >
     <h2>When and where you need it</h2>
