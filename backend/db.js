@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
+const mongoURI = "mongodb+srv://aksn0204:aksn0204@cluster0.skpu4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
-const mongoURI = "mongodb+srv://aksn0204:aksn0204@cluster0.8pzo5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
-const connectToMongo = ()=>{
-    console.log("chal na");
+const connectToMongo = async () => {
+    console.log("Attempting to connect to MongoDB...");
     try {
-    mongoose.connect(mongoURI, ()=>{
-        console.log("Connected to Mongo Successfully");
-    })
-}
-catch (error) {
-    console.log(error);
-}
-}
+        await mongoose.connect(mongoURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log("Connected to MongoDB successfully!");
+    } catch (error) {
+        console.error("Error connecting to MongoDB:", error.message);
+    }
+};
 
 module.exports = connectToMongo;
